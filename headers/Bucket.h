@@ -3,13 +3,12 @@
 
 #include<vector>
 #include<Point.h>
-#include<algorithm>
 
 class Bucket{
 	public:
 		Bucket(std::vector<Point>&& in);
-		Bucket();
-		~Bucket();
+		Bucket() = default;
+		~Bucket() = default;
 
 		static std::vector<Bucket> build(int num, std::vector<Point>&& points);
 		std::vector<Point> points;
@@ -32,7 +31,7 @@ class Bucket{
 			return in;
 		}
 		
-		inline static int ilog2(int x) {
+		constexpr inline static int ilog2(int x) {
 
 			int u = x;
 
@@ -69,7 +68,7 @@ class Bucket{
 			return x ;
 		}
 
-		static void build_helper(int r, int index, std::vector<Bucket>& ret, std::vector<Point>&& points);
+		static void build_helper(int r, int index,std::vector<Bucket>& ret, std::vector<Point>&& points);
 
 };
 

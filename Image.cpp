@@ -1,24 +1,23 @@
 #include <Image.h>
-#include <iostream>
+#include <algorithm>
+#include <random>
 
 
-Image::Image(std::string&& fn)
+Image::Image(const std::string& fn)
 {
 	unsigned error = lodepng::decode(image, width, height, fn);
 	std::vector<Point> points;
 	for(int i = 0; i < width * height; i++){
-		unsigned char x = image[(i<<2)];
+		unsigned char x = image[(i<<2)+0];
 		unsigned char y = image[(i<<2)+1];
 		unsigned char z = image[(i<<2)+2];
 		points.emplace_back(x,y,z,i);
 	}
+	std::shuffle(points.begin(), points.end(), std::default_random_engine(123));
 	
 	buckets = Bucket::build(128,std::move(points));
 }
 
-Image::~Image()
-{
-}
 
 void Image::set_point(unsigned char* point1, unsigned char* point2){
 	point2[0] = point1[0]; 
@@ -37,6 +36,6 @@ void Image::rearrange(Image& other){
 	image = std::move(temp);
 }
 
-void Image::encode(std::string&& fn){
+void Image::encode(const std::string& fn){
 	lodepng::encode(fn, image, width, height);
 }

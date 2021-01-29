@@ -1,16 +1,8 @@
 #include <Bucket.h>
-#include <iostream>
+#include <algorithm>
 
 Bucket::Bucket(std::vector<Point>&& in)
 	: points(in)
-{
-}
-
-Bucket::Bucket()
-{
-}
-
-Bucket::~Bucket()
 {
 }
 
@@ -23,9 +15,9 @@ std::vector<Bucket> Bucket::build(int num, std::vector<Point>&& points){
 	return ret;
 }
 
-void Bucket::build_helper(int r, int index, std::vector<Bucket>& ret, std::vector<Point>&& points){
+void Bucket::build_helper(int r, int index,std::vector<Bucket>& ret, std::vector<Point>&& points){
 	if (r == 0){
-		ret.emplace(ret.begin()+index, Bucket(std::move(points)));
+		ret[index] = std::move(Bucket(std::move(points)));
 		return;
 	}
 	std::nth_element(points.begin(), points.begin() + points.size()/2, points.end(), 
@@ -34,7 +26,7 @@ void Bucket::build_helper(int r, int index, std::vector<Bucket>& ret, std::vecto
 			return a.value[r%3] > b.value[r%3]; 
 		});
 	
-	auto middle = std::next( points.begin(), points.size() / 2 );
+	auto middle = std::next(points.begin(), points.size() / 2);
 	std::vector<Point> lpoints(points.begin(),middle);
 	std::vector<Point> rpoints(middle,points.end());
 
